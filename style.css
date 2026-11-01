@@ -905,3 +905,5 @@ img[src$="lecture-5.jpg"] { object-position: 62% 42%; } /* 대표가 서 있는 
 .rev blockquote p + p { margin-top: 10px; }
 .rev figcaption { margin-top: 16px; font-size: 13px; color: var(--muted, #71717a); }
 .rev-more { margin-top: 16px; text-align: center; }
+.rev-grid--home { columns: 3 300px; }
+.news-card h3 { font-size: 19px; line-height: 1.4; margin: 6px 0 8px; }

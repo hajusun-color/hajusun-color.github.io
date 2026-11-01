@@ -89,9 +89,12 @@ function relatedService(post) {
 
 /* ---------- 메뉴에 '소식' 추가 ---------- */
 function addNewsMenu(html, current) {
-  if (!/href="news\.html"/.test(html)) {
-    html = html.replace(/(<a href="gallery\.html"[^>]*>갤러리<\/a>)/, '$1\n      <a href="news.html">소식</a>');
-    html = html.replace(/(<a href="gallery\.html">수업·활동 갤러리<\/a>)/, '$1\n          <a href="news.html">소식</a>');
+  if (!/<a href="news\.html"[^>]*>소식<\/a>/.test(html)) {
+    /* 소식은 '후기' 바로 뒤에 (후기 메뉴가 없으면 갤러리 뒤) */
+    if (/<a href="reviews\.html"[^>]*>후기<\/a>/.test(html)) html = html.replace(/(<a href="reviews\.html"[^>]*>후기<\/a>)/, '$1\n      <a href="news.html">소식</a>');
+    else html = html.replace(/(<a href="gallery\.html"[^>]*>갤러리<\/a>)/, '$1\n      <a href="news.html">소식</a>');
+    if (/<a href="reviews\.html">방문자 후기<\/a>/.test(html)) html = html.replace(/(<a href="reviews\.html">방문자 후기<\/a>)/, '$1\n          <a href="news.html">소식</a>');
+    else html = html.replace(/(<a href="gallery\.html">수업·활동 갤러리<\/a>)/, '$1\n          <a href="news.html">소식</a>');
   }
   if (current) {
     html = html.replace(/ aria-current="page"/g, '');
@@ -252,6 +255,24 @@ const cards = posts.map(p => `
             </div>
           </a>
         </article>`).join('');
+/* 첫 화면 '최근 소식'에 최신 글 3개 넣기 */
+{
+  const ip = path.join(DIST, 'index.html');
+  const home = read(ip);
+  const latest = posts.slice(0, 3).map(p => `
+        <article class="news-card">
+          <a href="${p.file}" class="news-card__link">
+            ${thumb(p)}
+            <div class="news-card__body">
+              <p class="article__meta"><span class="article__cat">${esc(p.category)}</span>${p.date ? `<time datetime="${esc(p.date)}">${fmtDate(p.date)}</time>` : ''}</p>
+              <h3>${esc(p.title)}</h3>
+              ${p.summary ? `<p>${esc(p.summary)}</p>` : ''}
+            </div>
+          </a>
+        </article>`).join('');
+  fs.writeFileSync(ip, home.replace('<!--HOME_NEWS-->', latest ? `<div class="news-grid" data-stagger>${latest}
+      </div>` : '<p class="news-empty">곧 새로운 소식을 올리겠습니다.</p>'));
+}
 const newsMain = `
 <main id="main">
   <section class="page-hero">
