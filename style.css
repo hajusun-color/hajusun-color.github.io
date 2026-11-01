@@ -766,8 +766,8 @@ img[src$="lecture-5.jpg"] { object-position: 62% 42%; } /* 대표가 서 있는 
 .fab svg { width: 24px; height: 24px; }
 .fab:hover { transform: translateY(-3px); box-shadow: 0 4px 10px rgba(9, 9, 11, .14), 0 22px 40px -14px rgba(9, 9, 11, .45); }
 @media (max-width: 640px) {
-  /* 휴대폰: 하단 고정 바(전화/카카오톡) 위로 띄움 */
-  .fab { right: 14px; bottom: calc(84px + env(safe-area-inset-bottom)); min-height: 52px; padding: 0 18px 0 14px; font-size: 15px; }
+  /* 휴대폰: 하단 고정 바에 카카오톡 버튼이 있으므로 겹치지 않게 숨김 */
+  .fab { display: none; }
 }
 @media print { .fab, .dock { display: none !important; } }
 
